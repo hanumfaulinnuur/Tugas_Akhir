@@ -1,26 +1,29 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\SuratMasukController;
 
-// Route::get('/', function () {
-//     return view('welcome');
+
+// Route::get('/login', function () {
+//     return view('auth.login');
 // });
 
 
-Route::get('/login', function () {
+
+Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::get('/dashboard', function () {
+Route::get('/admin/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::group([
     'prefix' => 'admin'
 ], function () {
-    Route::get("/surat-masuk", [Controllers\Admin\SuratMasukController::class, "index"])
+    Route::get("/surat-masuk", [SuratMasukController::class, "index"])
         ->middleware(['auth', 'verified'])
         ->name('surat-masuk');
     Route::post("/surat-masuk/tambah-data", [Controllers\Admin\SuratMasukController::class, "store"])

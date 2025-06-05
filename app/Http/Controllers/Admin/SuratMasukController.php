@@ -15,18 +15,11 @@ class SuratMasukController extends Controller
      */
     public function index()
 {
-    // $suratMasuk = SuratMasuk::orderBy('tanggal', 'desc')->get();
     $jenisSurat = JenisSurat::all(); // ambil data jenis surat untuk dropdown
     $suratMasuk = SuratMasuk::with('jenisSurat')->get(); // ambil data surat masuk beserta jenis suratnya (pastikan relasi 'jenisSurat' ada di model SuratMasuk)
 
     return view('komponen.surat-masuk', compact('jenisSurat', 'suratMasuk'));
 }
-
-//     public function riwayat()
-// {
-//     $suratMasuk = SuratMasuk::with('jenisSurat')->orderBy('tanggal', 'desc')->get();
-//     return view('riwayat.masuk', compact('suratMasuk'));
-// }
 
     /**
      * Show the form for creating a new resource.
@@ -111,6 +104,6 @@ class SuratMasukController extends Controller
     {
         $data = SuratMasuk::find($id);
         $data->delete();
-        return redirect()->route('surat-masuk')->with('sukses', 'Data Berhasil Dihapus');
+        return redirect()->route('suratMasuk')->with('sukses', 'Data Berhasil Dihapus');
     }
 }

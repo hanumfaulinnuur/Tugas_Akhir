@@ -2,12 +2,19 @@
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
-                <a class="nav-link" href="index.html">
+                <a class="nav-link" href="{{ route('dashboard') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
+
+                <!-- Menu Detail Surat -->
+                <a class="nav-link" href="{{ route('surat-masuk') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
+                    Surat Masuk
+                </a>
+
                 {{-- surat masuk --}}
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
+                {{-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts"
                     aria-expanded="false" aria-controls="collapseLayouts">
                     <div class="sb-nav-link-icon"><i class="fa-solid fa-envelope-circle-check"></i></div>
                     Surat Masuk
@@ -19,8 +26,10 @@
                         <a class="nav-link" href="layout-static.html">Static Navigation</a>
                         <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
                     </nav>
-                </div>
+                </div> --}}
                 {{-- end --}}
+
+
                 {{-- surat keluar --}}
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
                     aria-expanded="false" aria-controls="collapsePages">
