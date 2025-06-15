@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\JenisSurat;
 use App\Models\Admin\SuratMasuk;
-
+use App\Models\Pegawai\Pegawai;
+use Illuminate\Support\Facades\DB;
 
 class SuratMasukController extends Controller
 {
@@ -15,10 +16,27 @@ class SuratMasukController extends Controller
      */
     public function index()
 {
-    $jenisSurat = JenisSurat::all(); // ambil data jenis surat untuk dropdown
-    $suratMasuk = SuratMasuk::with('jenisSurat')->get(); // ambil data surat masuk beserta jenis suratnya (pastikan relasi 'jenisSurat' ada di model SuratMasuk)
+    // Ambil semua jenis surat untuk dropdown
+    $jenisSurat = JenisSurat::all();
 
-    return view('komponen.surat-masuk', compact('jenisSurat', 'suratMasuk'));
+    // Ambil data pegawai beserta nama jabatannya
+    $pegawai = DB::table('pegawais')
+        ->join('jabatan_pegawais', 'pegawais.id', '=', 'jabatan_pegawais.id_pegawai')
+        ->join('jabatans', 'jabatan_pegawais.id_jabatan', '=', 'jabatans.id')
+        ->select('pegawais.*', 'jabatans.nama_jabatan')
+        ->get();
+
+    // Ambil data surat masuk beserta relasi jenis surat dan penerima
+    $suratMasuk = SuratMasuk::with(['jenisSurat', 'penerimaSuratMasukEksternal.pegawai'])->paginate(5);
+
+    // Ambil daftar jabatan pegawai untuk ditampilkan di tabel
+    $jabatanPegawais = DB::table('jabatan_pegawais')
+        ->join('jabatans', 'jabatan_pegawais.id_jabatan', '=', 'jabatans.id')
+        ->select('jabatan_pegawais.id_pegawai', 'jabatans.nama_jabatan')
+        ->get();
+
+    // Kirim semua data ke view
+    return view('komponen.surat-masuk', compact('jenisSurat', 'pegawai', 'suratMasuk', 'jabatanPegawais'));
 }
 
     /**
@@ -38,11 +56,17 @@ class SuratMasukController extends Controller
     $request->validate([
         'kode_surat' => 'required|string|max:255',
         'nomor_surat' => 'required|numeric',
-        'id_jenis_surat' => 'required|exists:jenis_surats,id', // atau 'integer' jika id
+        'id_jenis_surat' => 'required|exists:jenis_surats,id',
         'judul_surat' => 'required|string|max:255',
         'tanggal_surat' => 'required|date',
         'deskripsi' => 'nullable|string',
+        'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
     ]);
+
+    if ($request->hasFile('file')) {
+        $originalName = $request->file('file')->getClientOriginalName(); // Nama asli file
+        $filePath = $request->file('file')->storeAs('surat_files', $originalName, 'public');
+    }
 
     SuratMasuk::create([
         'kode_surat' => $request->kode_surat,
@@ -51,10 +75,14 @@ class SuratMasukController extends Controller
         'judul_surat' => $request->judul_surat,
         'tanggal_surat' => $request->tanggal_surat,
         'deskripsi' => $request->deskripsi,
+        'file' => $filePath ?? null, // menyimpan path relatif ke storage/public
     ]);
 
     return redirect()->back()->with('success', 'Surat berhasil disimpan.');
 }
+
+    
+
 
     /**
      * Display the specified resource.
@@ -90,11 +118,12 @@ class SuratMasukController extends Controller
             'id_jenis_surat' => 'exists:jenis_surats,id',
             'judul_surat' => 'required',
             'tanggal_surat' => 'required',
-            'deskripsi' => 'required'
+            'deskripsi' => 'required',
+            'file' => 'required',
         ]);
         $data = SuratMasuk::find($id);
         $data->update($validate);
-        return redirect()->route('surat-masuk')->with('sukses', 'Data Berhasil Diupdate');
+        return redirect()->route('komponen.surat-masuk')->with('sukses', 'Data Berhasil Diupdate');
     }
 
     /**

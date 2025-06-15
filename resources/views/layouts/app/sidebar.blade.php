@@ -6,9 +6,33 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                     Dashboard
                 </a>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseRiwayatSurat"
+                    aria-expanded="false" aria-controls="collapseRiwayatSurat">
+                    <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                    Kelola Data
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+
+                <div class="collapse" id="collapseRiwayatSurat" aria-labelledby="headingRiwayatSurat"
+                    data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="{{ route('komponen.data-master.data') }}">
+                            Pegawai
+                        </a>
+                        <a class="nav-link" href="{{ route('komponen.data-master.unit') }}">
+                            Unit
+                        </a>
+                        <a class="nav-link" href="{{ route('komponen.data-master.jabatan') }}">
+                            Jabatan
+                        </a>
+                        <a class="nav-link" href="{{ route('komponen.data-master.jabatanpeg') }}">
+                            Jabatan Pegawai
+                        </a>
+                    </nav>
+                </div>
 
                 <!-- Menu Detail Surat -->
-                <a class="nav-link" href="{{ route('surat-masuk') }}">
+                <a class="nav-link" href="{{ route('komponen.surat-masuk') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-file-alt"></i></div>
                     Surat Masuk
                 </a>
@@ -31,51 +55,28 @@
 
 
                 {{-- surat keluar --}}
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages"
-                    aria-expanded="false" aria-controls="collapsePages">
-                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                    Surat Keluar
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
-                    data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                            Authentication
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="login.html">Login</a>
-                                <a class="nav-link" href="register.html">Register</a>
-                                <a class="nav-link" href="password.html">Forgot Password</a>
-                            </nav>
-                        </div>
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#pagesCollapseError" aria-expanded="false"
-                            aria-controls="pagesCollapseError">
-                            Error
-                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                        </a>
-                        <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
-                            data-bs-parent="#sidenavAccordionPages">
-                            <nav class="sb-sidenav-menu-nested nav">
-                                <a class="nav-link" href="401.html">401 Page</a>
-                                <a class="nav-link" href="404.html">404 Page</a>
-                                <a class="nav-link" href="500.html">500 Page</a>
-                            </nav>
-                        </div>
-                    </nav>
-                </div>
-                <a class="nav-link" href="charts.html">
+<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSurat"
+    aria-expanded="false" aria-controls="collapseSurat">
+    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+    Surat Keluar
+    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+</a>
+
+<div class="collapse" id="collapseSurat" data-bs-parent="#sidenavAccordion">
+    <nav class="sb-sidenav-menu-nested nav">
+        <a class="nav-link" href="#">Pegawai</a>
+        <a class="nav-link" href="#">Unit</a>
+    </nav>
+</div>
+
+
+                <a class="nav-link" href="{{ route('komponen.riwayat-surat') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Riwayat Surat
                 </a>
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="{{ route('komponen.kirim-surat') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                    Tables
+                    Kirim Surat
                 </a>
             </div>
         </div>

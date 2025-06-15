@@ -18,4 +18,9 @@ class JenisSurat extends Model
     {
         return $this->hasMany(SuratMasuk::class, 'id_jenis_surat');
     }
+
+    public function suratKeluarEksternal()
+    {
+        return $this->hasMany(SuratKeluarEksternal::class, 'id_jenis_surat');
+    }
 }

@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Admin\RiwayatSurat;
+use App\Models\Admin\SuratMasuk;
+use App\Http\Controllers\Controller;
+use App\Models\Admin\JenisSurat;
 use Illuminate\Http\Request;
 
 class RiwayatSuratController extends Controller
@@ -10,9 +12,12 @@ class RiwayatSuratController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+   public function index()
     {
-        //
+        $suratMasuk = SuratMasuk::with('jenisSurat')->latest()->get();
+        $jenisSurat = JenisSurat::all();
+        return view('komponen.riwayat-surat', compact('suratMasuk', 'jenisSurat'));
+
     }
 
     /**
@@ -34,7 +39,7 @@ class RiwayatSuratController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(RiwayatSurat $riwayatSurat)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +47,7 @@ class RiwayatSuratController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(RiwayatSurat $riwayatSurat)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +55,7 @@ class RiwayatSuratController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, RiwayatSurat $riwayatSurat)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,8 +63,10 @@ class RiwayatSuratController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(RiwayatSurat $riwayatSurat)
+    public function destroy(string $id)
     {
-        //
+        $data = SuratMasuk::find($id);
+        $data->delete();
+        return redirect()->route('suratMasuk')->with('sukses', 'Data Berhasil Dihapus');
     }
 }

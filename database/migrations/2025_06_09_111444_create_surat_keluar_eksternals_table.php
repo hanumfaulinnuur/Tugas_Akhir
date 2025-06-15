@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('surat_masuks', function (Blueprint $table) {
+        Schema::create('surat_keluar_eksternals', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_surat');
-            $table->string('nomor_surat');
+            $table->string('no_surat')->unique();
+            $table->date('tgl_keluar_surat');
+            $table->string('deskripsi_surat');
+            $table->string('penerima_surat');
             $table->unsignedBigInteger('id_jenis_surat');
-            $table->foreign('id_jenis_surat')->references('id')->on('jenis_surats')->onDelete('cascade');
-            $table->string('judul_surat');
-            $table->date('tanggal_surat');
-            $table->string('deskripsi');
-            $table->string('file')->nullable();
+            $table->foreign('id_jenis_surat')->references('id')->on('surat_keluar_eksternals')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('surat_masuks');
+        Schema::dropIfExists('surat_keluar_eksternals');
     }
 };
