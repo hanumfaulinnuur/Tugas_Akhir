@@ -7,12 +7,12 @@ use App\Models\Pegawai\Pegawai;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class PengerimSuratInternal extends Model
+class PengirimSuratInternal extends Model
 {
     use HasFactory;
 
     protected $primaryKey = 'id';
-    protected $table = 'pengerim_surat_internals';
+    protected $table = 'pengirim_surat_internals';
 
     protected $fillable = [
         'id_pegawai',

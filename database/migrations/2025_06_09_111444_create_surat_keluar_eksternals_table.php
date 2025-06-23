@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('deskripsi_surat');
             $table->string('penerima_surat');
             $table->unsignedBigInteger('id_jenis_surat');
-            $table->foreign('id_jenis_surat')->references('id')->on('surat_keluar_eksternals')->onDelete('cascade');
+             $table->foreign('id_jenis_surat')->references('id')->on('jenis_surats')->onDelete('cascade');
             $table->timestamps();
         });
     }

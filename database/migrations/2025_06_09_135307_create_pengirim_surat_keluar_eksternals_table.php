@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('pengirim_surat_keluar_eksternals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_surat_keluar_internal');
+            $table->unsignedBigInteger('id_surat_keluar_eksternal');
             $table->unsignedBigInteger('id_pegawai');
 
         // Tambahkan foreign key dengan nama constraint yang lebih pendek
-        $table->foreign('id_surat_keluar_internal', 'fk_surat_keluar_internal')
-              ->references('id')->on('surat_keluar_internals')
+        $table->foreign('id_surat_keluar_eksternal', 'fk_surat_keluar_eksternal')
+              ->references('id')->on('surat_keluar_eksternals')
               ->onDelete('cascade');
 
         $table->foreign('id_pegawai', 'fk_pegawai')

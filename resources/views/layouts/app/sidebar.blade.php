@@ -55,25 +55,25 @@
 
 
                 {{-- surat keluar --}}
-<a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSurat"
-    aria-expanded="false" aria-controls="collapseSurat">
-    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-    Surat Keluar
-    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-</a>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSurat"
+                    aria-expanded="false" aria-controls="collapseSurat">
+                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                    Surat Keluar
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
 
-<div class="collapse" id="collapseSurat" data-bs-parent="#sidenavAccordion">
-    <nav class="sb-sidenav-menu-nested nav">
-        <a class="nav-link" href="#">Pegawai</a>
-        <a class="nav-link" href="#">Unit</a>
-    </nav>
-</div>
+                <div class="collapse" id="collapseSurat" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="{{ Route('komponen.surat-keluar-int') }}">Surat Keluar Internal</a>
+                        <a class="nav-link" href="{{ Route('komponen.surat-keluar-eks') }}">Surat Keluar Eksternal</a>
+                    </nav>
+                </div>
 
-
-                <a class="nav-link" href="{{ route('komponen.riwayat-surat') }}">
+                {{-- riwayat surat --}}
+                {{-- <a class="nav-link" href="{{ route('komponen.riwayat-surat') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Riwayat Surat
-                </a>
+                </a> --}}
                 <a class="nav-link" href="{{ route('komponen.kirim-surat') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                     Kirim Surat
