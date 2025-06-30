@@ -146,7 +146,7 @@ Route::group([
     Route::delete("/surat-keluar-eks/hapus-data/{id}", [SuratKeluarEksternalController::class, "destroy"])
         ->middleware(['auth', 'verified'])
         ->name('komponen.hapus-data-keluareks');
-    Route::get('/surat-eksternal/preview/{id}', [SuratKeluarEksternalController::class, 'preview'])->name('komponen.preview-surat');
+    Route::get('/surat-eksternal/{id}/preview', [SuratKeluarEksternalController::class, 'preview'])->name('komponen.preview-surat');
 });
 
 Route::group([
@@ -168,32 +168,42 @@ Route::group([
         ->middleware(['auth', 'verified'])
         ->name('komponen.hapus-data-keluarint');
 });
+
 // Route::group([
 //     'prefix' => 'admin'
 // ], function () {
-//     Route::get("/riwayat-surat", [RiwayatSuratController::class, "index"])
-//         ->middleware(['auth', 'verified'])
-//         ->name('komponen.riwayat-surat');
-//     Route::delete("/riwayat-surat/hapus-riwayat/{id}", [RiwayatSuratController::class, "destroy"])
-//         ->middleware(['auth', 'verified'])
-//         ->name('komponen.hapus-riwayat');
-
+//     Route::get('/surat', [SuratKeluarEksternalController::class, 'index'])->name('surat.index');
+//     Route::post('/surat', [SuratKeluarEksternalController::class, 'store'])->name('surat.store');
+//     Route::get('/surat/{id}/preview', [SuratKeluarEksternalController::class, 'preview'])->name('surat.preview');
 // });
+
 
 Route::group([
     'prefix' => 'admin'
 ], function () {
-    Route::get("/kirim-surat", [KirimSuratController::class, "index"])
+    Route::get("/riwayat-surat", [RiwayatSuratController::class, "index"])
         ->middleware(['auth', 'verified'])
-        ->name('komponen.kirim-surat');
-    Route::post("/kirim-surat/tambah-data", [KirimSuratController::class, "index"])
-        ->middleware(['auth', 'verified'])
-        ->name('komponen.kirim-data-surat');
-    Route::get("/riwayat-surat", [RiwayatSuratController::class, "destroy"])
+        ->name('komponen.riwayat-surat');
+    Route::delete("/riwayat-surat/hapus-riwayat/{id}", [RiwayatSuratController::class, "destroy"])
         ->middleware(['auth', 'verified'])
         ->name('komponen.hapus-riwayat');
 
 });
+
+// Route::group([
+//     'prefix' => 'admin'
+// ], function () {
+//     Route::get("/kirim-surat", [KirimSuratController::class, "index"])
+//         ->middleware(['auth', 'verified'])
+//         ->name('komponen.kirim-surat');
+//     Route::post("/kirim-surat/tambah-data", [KirimSuratController::class, "index"])
+//         ->middleware(['auth', 'verified'])
+//         ->name('komponen.kirim-data-surat');
+//     Route::get("/riwayat-surat", [RiwayatSuratController::class, "destroy"])
+//         ->middleware(['auth', 'verified'])
+//         ->name('komponen.hapus-riwayat');
+
+// });
 
 
 

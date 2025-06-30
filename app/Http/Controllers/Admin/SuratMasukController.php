@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin\JenisSurat;
 use App\Models\Admin\SuratMasuk;
+use App\Models\DataTujuanSurat\PenerimaSuratMasukEksternal;
 use App\Models\Pegawai\Pegawai;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,7 @@ class SuratMasukController extends Controller
 {
     // Ambil semua jenis surat untuk dropdown
     $jenisSurat = JenisSurat::all();
+    $penerimaSuratMasukEksternal = PenerimaSuratMasukEksternal::all();
 
     // Ambil data pegawai beserta nama jabatannya
     $pegawai = DB::table('pegawais')
@@ -61,28 +63,36 @@ class SuratMasukController extends Controller
         'tanggal_surat' => 'required|date',
         'deskripsi' => 'nullable|string',
         'file' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+        'id_pegawai' => 'required|array',
+        'id_pegawai.*' => 'exists:pegawais,id',
     ]);
 
     if ($request->hasFile('file')) {
-        $originalName = $request->file('file')->getClientOriginalName(); // Nama asli file
+        $originalName = $request->file('file')->getClientOriginalName();
         $filePath = $request->file('file')->storeAs('surat_files', $originalName, 'public');
     }
 
-    SuratMasuk::create([
+    // Simpan data surat
+    $surat = SuratMasuk::create([
         'kode_surat' => $request->kode_surat,
         'nomor_surat' => $request->nomor_surat,
         'id_jenis_surat' => $request->id_jenis_surat,
         'judul_surat' => $request->judul_surat,
         'tanggal_surat' => $request->tanggal_surat,
         'deskripsi' => $request->deskripsi,
-        'file' => $filePath ?? null, // menyimpan path relatif ke storage/public
+        'file' => $filePath ?? null,
     ]);
+
+    // Simpan penerima surat
+    foreach ($request->id_pegawai as $idPegawai) {
+        PenerimaSuratMasukEksternal::create([
+            'id_surat_masuk' => $surat->id,
+            'id_pegawai' => $idPegawai,
+        ]);
+    }
 
     return redirect()->back()->with('success', 'Surat berhasil disimpan.');
 }
-
-    
-
 
     /**
      * Display the specified resource.

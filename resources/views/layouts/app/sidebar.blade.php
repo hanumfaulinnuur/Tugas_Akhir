@@ -70,13 +70,13 @@
                 </div>
 
                 {{-- riwayat surat --}}
-                {{-- <a class="nav-link" href="{{ route('komponen.riwayat-surat') }}">
+                <a class="nav-link" href="{{ route('komponen.riwayat-surat') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                     Riwayat Surat
-                </a> --}}
-                <a class="nav-link" href="{{ route('komponen.kirim-surat') }}">
+                </a> 
+               {{-- <a class="nav-link" href="{{ route('komponen.kirim-surat') }}">
                     <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                    Kirim Surat
+                    Kirim Surat --}}
                 </a>
             </div>
         </div>

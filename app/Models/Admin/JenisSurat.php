@@ -12,7 +12,7 @@ class JenisSurat extends Model
     protected $primaryKey = "id";
     protected $table = 'jenis_surats';
 
-    protected $fillable = ['nama_jenis_surat'];
+    protected $fillable = ['nama_jenis_surat','kode'];
 
     public function suratMasuk()
     {

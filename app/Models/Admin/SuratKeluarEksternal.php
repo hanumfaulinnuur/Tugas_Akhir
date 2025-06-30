@@ -12,13 +12,19 @@ class SuratKeluarEksternal extends Model
     protected $primaryKey = 'id';
     protected $table = 'surat_keluar_eksternals';
 
-    protected $fillable = [
-        'no_surat',
-        'tgl_keluar_surat',
-        'deskripsi_surat',
-        'penerima_surat',
-        'id_jenis_surat',
-    ];
+   protected $fillable = [
+    'tgl_keluar_surat',
+    'penerima_surat',
+    'deskripsi_surat',
+    'id_jenis_surat',
+    'kode_urusan',
+    'no_urut',
+    'kode_satuan',
+    'no_surat',
+    'data_dinamis',
+    'template'
+];
+
     public function jenisSurat()
     {
         return $this->belongsTo(JenisSurat::class, 'id_jenis_surat');

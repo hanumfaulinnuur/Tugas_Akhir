@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\JenisSurat;
 use Illuminate\Http\Request;
 use App\Models\Pegawai\Pegawai;
 
@@ -14,7 +15,8 @@ class PegawaiController extends Controller
     public function index()
     {
         $pegawai = Pegawai::all();
-        return view('komponen.data-master.pegawai', compact('pegawai'));
+        $jenisSurat = JenisSurat::all();
+        return view('komponen.data-master.pegawai', compact('pegawai', 'jenisSurat'));
     }
 
     /**

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('penerima_surat_masuk_eksternals', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_surat_masuk_internal');
-            $table->foreign('id_surat_masuk_internal')->references('id')->on('surat_masuks')->onDelete('cascade');
+            $table->unsignedBigInteger('id_surat_masuk');
+            $table->foreign('id_surat_masuk')->references('id')->on('surat_masuks')->onDelete('cascade');
             $table->unsignedBigInteger('id_pegawai');
             $table->foreign('id_pegawai')->references('id')->on('pegawais')->onDelete('cascade');
             $table->timestamps();

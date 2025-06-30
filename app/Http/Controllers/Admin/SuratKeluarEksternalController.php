@@ -10,6 +10,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\IOFactory;
+use Carbon\Carbon;
 
 class SuratKeluarEksternalController extends Controller
 {
@@ -22,7 +23,8 @@ class SuratKeluarEksternalController extends Controller
     {
         $data = SuratKeluarEksternal::latest()->get();
         $jenisSurats = JenisSurat::all();
-        return view('komponen.surat-keluar-eks', compact('data', 'jenisSurats'));
+        return view('komponen.surat-keluar.surat-keluar-eks', compact('data', 'jenisSurats'));
+        
     }
 
     /**
@@ -36,63 +38,58 @@ class SuratKeluarEksternalController extends Controller
     /**
      * Store a newly created resource in storage.
      */
- public function store(Request $request)
-    {
-        $request->validate([
-            'tgl_keluar_surat' => 'required|date',
-            'deskripsi_surat' => 'required|string',
-            'penerima_surat' => 'required|string|max:255',
-            'id_jenis_surat' => 'required|exists:jenis_surats,id',
-            'template' => 'required|string',
-        ]);
+    public function store(Request $request)
+{
+    $request->validate([
+        'tgl_keluar_surat' => 'required|date',
+        'penerima_surat' => 'required|string',
+        'deskripsi_surat' => 'required|string',
+        'id_jenis_surat' => 'required|exists:jenis_surats,id',
+        'hari' => 'required|string',
+        'tanggal_acara' => 'required|date',
+        'waktu' => 'required|string',
+        'acara' => 'required|string',
+        'tempat' => 'required|string',
+        'kegiatan' => 'required|string',
+    ]);
 
-        $nomorSurat = $this->generateNomorSurat(SuratKeluarEksternal::class, 'EXT');
+    $kode_urusan = '421.6';
+    $kode_satuan = '188';
 
-        $surat = SuratKeluarEksternal::create([
-            'no_surat' => $nomorSurat,
-            'tgl_keluar_surat' => $request->tgl_keluar_surat,
-            'deskripsi_surat' => $request->deskripsi_surat,
-            'penerima_surat' => $request->penerima_surat,
-            'id_jenis_surat' => $request->id_jenis_surat,
-        ]);
+    $bulan = Carbon::parse($request->tgl_keluar_surat)->format('m');
+    $tahun = Carbon::parse($request->tgl_keluar_surat)->format('Y');
 
-        $templateName = $request->template;
-        $templatePath = public_path("template-surat/eksternal/{$templateName}.docx");
+    $count = SuratKeluarEksternal::whereYear('tgl_keluar_surat', $tahun)->count();
+    $no_urut = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
 
-        if (!file_exists($templatePath)) {
-            return back()->with('error', 'Template Word tidak ditemukan.');
-        }
+    // ambil template dari jenis surat
+    $jenisSurat = JenisSurat::findOrFail($request->id_jenis_surat);
+    $template = $jenisSurat->kode;
 
-        $template = new TemplateProcessor($templatePath);
+    // data tetap
+    $data = $request->only([
+        'tgl_keluar_surat',
+        'penerima_surat',
+        'deskripsi_surat',
+        'id_jenis_surat',
+    ]);
 
-        $template->setValue('nama_sekolah', 'SMP NUHUUDLIYYAH');
-        $template->setValue('alamat_sekolah', 'Jl. Karangsari, Desa Parijatah Kulon, Kec. Srono, Banyuwangi');
-        $template->setValue('nss', '202052511245');
-        $template->setValue('nis', '201770');
-        $template->setValue('npsn', '60726570');
-        $template->setValue('email_sekolah', 'nuhuudliyyah2012@gmail.com');
-        $template->setValue('nomor_surat', $nomorSurat);
-        $template->setValue('lampiran', '-');
-        $template->setValue('perihal', 'Permohonan Re-Akreditasi Sekolah');
-        $template->setValue('penerima', $request->penerima_surat);
-        $template->setValue('status_sekolah', 'Swasta');
-        $template->setValue('no_hp', '0852 0493 3967');
-        $template->setValue('no_sk', '503/205/429.111/2021');
-        $template->setValue('tanggal', now()->translatedFormat('d F Y'));
-        $template->setValue('kepala_sekolah', 'AHMAD MORSIDI, S.Pd.I');
+    $data['no_urut'] = $no_urut;
+    $data['kode_urusan'] = $kode_urusan;
+    $data['kode_satuan'] = $kode_satuan;
+    $data['no_surat'] = "{$kode_urusan}/{$no_urut}/{$kode_satuan}/{$bulan}/{$tahun}";
+    $data['template'] = $template;
 
-        $cleanNomorSurat = str_replace('/', DIRECTORY_SEPARATOR, $nomorSurat);
-        $outputPath = public_path("generated/" . $cleanNomorSurat . ".docx");
-        $folderPath = dirname($outputPath);
+    // field tambahan
+    $data['data_dinamis'] = json_encode($request->only([
+        'hari', 'tanggal_acara', 'waktu', 'acara', 'tempat', 'kegiatan'
+    ]));
 
-        if (!file_exists($folderPath)) {
-            mkdir($folderPath, 0777, true);
-        }
+    SuratKeluarEksternal::create($data);
 
-        $template->saveAs($outputPath);
+    return redirect()->route('komponen.surat-keluar-eks')->with('success', 'Surat berhasil disimpan.');
+}
 
-        return redirect()->back()->with('success', 'Surat berhasil disimpan.');
-    }
 
     /**
      * Display the specified resource.
@@ -148,47 +145,23 @@ class SuratKeluarEksternalController extends Controller
         return Response::download($filePath, 'Surat-' . str_replace('/', '-', $nomorSurat) . '.docx');
     }
 
-   public function preview($id)
+    public function preview($id)
 {
-    $surat = SuratKeluarEksternal::with('jenisSurat')->findOrFail($id);
+    // Ambil surat berdasarkan ID
+    $surat = SuratKeluarEksternal::findOrFail($id);
 
-    // ✅ Perbaikan di sini
-    $jenisSurat = trim($surat->jenisSurat->nama_jenis_surat ?? '');
+    // Ambil data dinamis dari field JSON 'data_dinamis'
+    $dinamis = json_decode($surat->data_dinamis, true);
 
-    if (!$jenisSurat) {
-        return response()->json([
-            'html' => '<p class="text-danger">Jenis surat tidak tersedia.</p>'
-        ]);
+    // Inject field JSON menjadi properti langsung ke objek $surat
+    foreach ($dinamis as $key => $value) {
+        $surat->{$key} = $value;
     }
 
-    $namaTemplate = str_replace(' ', '_', strtolower($jenisSurat)) . '.docx';
-    $templatePath = public_path("template-surat/eksternal/{$namaTemplate}");
-
-    if (!file_exists($templatePath)) {
-        return response()->json([
-            'html' => "<p class='text-danger'>Template tidak ditemukan. Dicari di: {$templatePath}</p>"
-        ]);
-    }
-
-    // Lanjutkan proses preview
-    $processor = new \PhpOffice\PhpWord\TemplateProcessor($templatePath);
-    $processor->setValue('no_surat', $surat->no_surat);
-    $processor->setValue('nama', $surat->penerima_surat);
-    $processor->setValue('tanggal', \Carbon\Carbon::parse($surat->tgl_keluar_surat)->translatedFormat('d F Y'));
-    $processor->setValue('deskripsi', $surat->deskripsi_surat);
-
-    $tempDocxPath = storage_path("app/temp/surat_{$id}.docx");
-    $processor->saveAs($tempDocxPath);
-
-    $phpWord = \PhpOffice\PhpWord\IOFactory::load($tempDocxPath);
-    $htmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
-
-    ob_start();
-    $htmlWriter->save('php://output');
-    $html = ob_get_clean();
-
-    return response()->json(['html' => $html]);
+    // Kirim ke blade berdasarkan nama template
+    return view('preview-surat-keluar.' . $surat->template, compact('surat'));
 }
+
     /**
      * Show the form for editing the specified resource.
      */

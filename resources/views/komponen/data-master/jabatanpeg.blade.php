@@ -8,7 +8,7 @@
         <div class="card my-4 p-4">
             <h2>Data Jabatan Pegawai</h2>
 
-            <div class="d-flex justify-content-start mt-3">
+            <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSurat">
                     + Tambah Data
                 </button>
@@ -57,7 +57,7 @@
             </div>
 
             <!-- Table Data -->
-            <table class="table table-bordered mt-5">
+            <table id="table-jabatan_pegawai" class="table table-bordered mt-5">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -73,12 +73,25 @@
                             <td>{{ $jabatans1->pegawai->nama_pegawai ?? '-' }}</td>
                             <td>{{ $jabatans1->jabatan->nama_jabatan ?? '-' }}</td>
                             <td>
-                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $jabatans1->id }}">Edit</button>
-                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $jabatans1->id }}">Detail</button>
+                                <!-- Edit -->
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#modalEdit{{ $jabatans1->id }}" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <!-- Detail -->
+                                <button class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#modalDetail{{ $jabatans1->id }}" title="Detail">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+
+                                <!-- Hapus -->
                                 <form action="{{ route('komponen.hapus-jabatanpeg', $jabatans1->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
+                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus?')" title="Hapus">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -180,3 +193,24 @@
     </div>
 </main>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        // Inisialisasi DataTables
+        var table = $('#table-jabatan_pegawai').DataTable({
+            ordering: false
+        });
+
+        // Fitur pencarian manual dari form search header
+        $('#globalSearch').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+
+        $('#btnNavbarSearch').on('click', function () {
+            var keyword = $('#globalSearch').val();
+            table.search(keyword).draw();
+        });
+    });
+</script>
+@endpush

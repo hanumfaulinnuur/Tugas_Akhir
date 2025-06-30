@@ -8,7 +8,7 @@
 
         
                  <!-- Table -->
-                <table class="table table-bordered mt-5">
+                <table id="table-riwayat_surat" class="table table-bordered mt-5">
                     <thead>
                         <tr>
                             <th>#</th>

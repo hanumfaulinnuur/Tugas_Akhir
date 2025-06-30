@@ -9,7 +9,7 @@
             <h2>Data Jabatan</h2>
 
             <!-- Button trigger modal tambah -->
-                <div class="d-flex justify-content-start mt-3">
+                <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSurat">
                         + Tambah Data
                     </button>
@@ -55,7 +55,7 @@
                 </div>
 
                 <!-- Table -->
-                <table class="table table-bordered mt-5">
+                <table id="table-jabatan" class="table table-bordered mt-5">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -72,13 +72,25 @@
                                 <td>{{ $jabatans->unit->nama_unit ?? '-' }}</td>
                             </td>
 
-                                <td>
-                                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
-                                        data-bs-target="#modalEdit{{ $jabatans->id }}">Edit</button>
-                                    <button class="btn btn-sm btn-info" data-bs-toggle="modal"
-                                        data-bs-target="#modalDetail{{ $jabatans->id }}">Detail</button>
-                                    <button class="btn btn-sm btn-danger">Hapus</button>
-                                </td>
+                                
+                                 <td>
+                                <!-- Edit -->
+                                <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#modalEdit{{ $jabatans->id }}" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <!-- Detail -->
+                                <button class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                    data-bs-target="#modalDetail{{ $jabatans->id }}" title="Detail">
+                                    <i class="fas fa-info-circle"></i>
+                                </button>
+
+                                <!-- Hapus -->
+                                <button class="btn btn-sm btn-danger" title="Hapus">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
                             </tr>
 
                             <!-- Modal Edit -->
@@ -181,5 +193,26 @@
         </div>
     </main>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+        // Inisialisasi DataTables
+        var table = $('#table-jabatan').DataTable({
+            ordering: false
+        });
+
+        // Fitur pencarian manual dari form search header
+        $('#globalSearch').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+
+        $('#btnNavbarSearch').on('click', function () {
+            var keyword = $('#globalSearch').val();
+            table.search(keyword).draw();
+        });
+    });
+</script>
+@endpush
 
 
