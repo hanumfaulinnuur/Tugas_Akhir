@@ -32,7 +32,7 @@ class SuratKeluarEksternalController extends Controller
      */
     public function create()
     {
-        return view('admin.surat-internal.create');
+        return view('admin.surat-eksternal.create');
     }
 
     /**
@@ -40,6 +40,7 @@ class SuratKeluarEksternalController extends Controller
      */
     public function store(Request $request)
 {
+    //  dd($request->all());
     $request->validate([
         'tgl_keluar_surat' => 'required|date',
         'penerima_surat' => 'required|string',
@@ -159,7 +160,28 @@ class SuratKeluarEksternalController extends Controller
     }
 
     // Kirim ke blade berdasarkan nama template
-    return view('preview-surat-keluar.' . $surat->template, compact('surat'));
+    return view('komponen.preview-surat-keluar.' . $surat->template, compact('surat'));
+
+}
+
+    public function upload(Request $request, $id)
+{
+    $request->validate([
+        'file_surat' => 'required|file|mimes:pdf|max:2048',
+    ]);
+
+    if (!$request->hasFile('file_surat')) {
+        return back()->with('error', 'File tidak ditemukan dalam request.');
+    }
+
+    $file = $request->file('file_surat');
+    $path = $file->store('surat-keluar', 'public');
+
+    $surat = SuratKeluarEksternal::findOrFail($id);
+    $surat->file = $path;
+    $surat->save();
+
+    return back()->with('success', 'File berhasil diupload.');
 }
 
     /**

@@ -28,7 +28,7 @@ class SuratMasuk extends Model
     }
     public function penerimaSuratMasukEksternal()
 {
-    return $this->hasMany(PenerimaSuratMasukEksternal::class, 'id_surat_masuk_eksternal');
+    return $this->hasMany(PenerimaSuratMasukEksternal::class, 'id_surat_masuk');
 }
 
 }

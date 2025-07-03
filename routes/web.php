@@ -147,6 +147,7 @@ Route::group([
         ->middleware(['auth', 'verified'])
         ->name('komponen.hapus-data-keluareks');
     Route::get('/surat-eksternal/{id}/preview', [SuratKeluarEksternalController::class, 'preview'])->name('komponen.preview-surat');
+    Route::post('/surat-keluar-eksternal/upload/{id}', [SuratKeluarEksternalController::class, 'upload'])->name('surat-keluar-eks.upload');
 });
 
 Route::group([
@@ -157,7 +158,7 @@ Route::group([
         ->name('komponen.surat-keluar-int');
     Route::post("/surat-keluar-int/tambah-data", [SuratKeluarInternalController::class, "store"])
         ->middleware(['auth', 'verified'])
-        ->name('komponen.tambah.surat-keluarint');
+        ->name('komponen.tambah-surat-keluarint');
         Route::get("/surat-keluar-int/detail-data", [SuratKeluarInternalController::class, "show"])
         ->middleware(['auth', 'verified'])
         ->name('komponen.detail-data-keluarint');
@@ -167,6 +168,8 @@ Route::group([
         Route::delete("/surat-keluar-int/hapus-data/{id}", [SuratKeluarInternalController::class, "destroy"])
         ->middleware(['auth', 'verified'])
         ->name('komponen.hapus-data-keluarint');
+    Route::get('/surat-keluar/internal/{id}/preview', [SuratKeluarInternalController::class, 'preview'])->name('surat-keluar-internal.preview');
+    Route::post('/surat-keluar-internal/upload/{id}', [SuratKeluarInternalController::class, 'upload'])->name('surat-keluar-internal.upload');
 });
 
 // Route::group([

@@ -18,10 +18,23 @@ class SuratKeluarInternal extends Model
         'tgl_keluar',
         'judul_surat',
         'deskripsi_surat',
+        'penerima_surat',
+        'file',
+        'id_jenis_surat',
+        'kode_urusan',
+        'no_urut',
+        'kode_satuan',
+        'data_dinamis',
+        'template'
+    
     ];
     public function penerimaSuratMasukIksternal()
     {
         return $this->hasMany(PenerimaSuratKeluarInternal::class, 'id_surat_keluar_internal');
+    }
+    public function jenisSurat()
+    {
+        return $this->belongsTo(JenisSurat::class, 'id_jenis_surat');
     }
 
 }

@@ -139,10 +139,12 @@ class SuratMasukController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+ public function destroy(string $id)
     {
         $data = SuratMasuk::find($id);
         $data->delete();
         return redirect()->route('suratMasuk')->with('sukses', 'Data Berhasil Dihapus');
     }
+    
 }
+

@@ -9,6 +9,7 @@
             <h2>Data Pegawai</h2>
 
             <!-- Button trigger modal tambah -->
+            
             <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahSurat">
                     + Tambah Data

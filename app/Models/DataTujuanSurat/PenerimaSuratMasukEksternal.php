@@ -16,7 +16,7 @@ class PenerimaSuratMasukEksternal extends Model
     protected $table = 'penerima_surat_masuk_eksternals';
 
     protected $fillable = [
-        'id_surat_masuk_ekstenal',
+        'id_surat_masuk',
         'id_pegawai',
     ];
     public function suratMasuk()

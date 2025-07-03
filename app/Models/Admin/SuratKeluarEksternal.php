@@ -16,6 +16,7 @@ class SuratKeluarEksternal extends Model
     'tgl_keluar_surat',
     'penerima_surat',
     'deskripsi_surat',
+    'file',
     'id_jenis_surat',
     'kode_urusan',
     'no_urut',

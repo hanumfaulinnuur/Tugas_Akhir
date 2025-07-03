@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Admin\SuratMasuk;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\JenisSurat;
+use App\Models\Admin\SuratKeluarEksternal;
+use App\Models\Admin\SuratKeluarInternal;
 use Illuminate\Http\Request;
 
 class RiwayatSuratController extends Controller
@@ -15,8 +17,10 @@ class RiwayatSuratController extends Controller
    public function index()
     {
         $suratMasuk = SuratMasuk::with('jenisSurat')->latest()->get();
+        $ski = SuratKeluarInternal::with('jenisSurat')->latest()->get();
+        $ske = SuratKeluarEksternal::with('jenisSurat')->latest()->get();
         $jenisSurat = JenisSurat::all();
-        return view('komponen.riwayat-surat', compact('suratMasuk', 'jenisSurat'));
+        return view('komponen.riwayat-surat', compact('suratMasuk', 'ski', 'ske', 'jenisSurat'));
 
     }
 
